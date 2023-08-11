@@ -10,7 +10,8 @@ import com.unity3d.player.IUnityPlayerLifecycleEvents
 import com.unity3d.player.UnityPlayer
 
 @SuppressLint("NewApi")
-class CustomUnityPlayer(context: Activity, upl: IUnityPlayerLifecycleEvents?) : UnityPlayer(context, upl) {
+class CustomUnityPlayer(context: Activity, upl: IUnityPlayerLifecycleEvents?) :
+    UnityPlayer(context, upl) {
 
     companion object {
         internal const val LOG_TAG = "CustomUnityPlayer"
@@ -24,9 +25,11 @@ class CustomUnityPlayer(context: Activity, upl: IUnityPlayerLifecycleEvents?) : 
     override fun onAttachedToWindow() {
         Log.i(LOG_TAG, "onAttachedToWindow")
         super.onAttachedToWindow()
-        UnityPlayerUtils.resume()
-        UnityPlayerUtils.pause()
-        UnityPlayerUtils.resume()
+        Thread {
+            UnityPlayerUtils.resume()
+            UnityPlayerUtils.pause()
+            UnityPlayerUtils.resume()
+        }.start()
     }
 
     override fun onDetachedFromWindow() {
@@ -42,7 +45,7 @@ class CustomUnityPlayer(context: Activity, upl: IUnityPlayerLifecycleEvents?) : 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean{
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
 
         event.source = InputDevice.SOURCE_TOUCHSCREEN

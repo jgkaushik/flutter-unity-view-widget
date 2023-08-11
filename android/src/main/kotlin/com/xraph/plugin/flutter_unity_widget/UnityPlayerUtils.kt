@@ -46,7 +46,10 @@ class UnityPlayerUtils {
          * Create a new unity player with callback
          */
         @SuppressLint("NewApi")
-        fun createUnityPlayer(ule: IUnityPlayerLifecycleEvents, callback: OnCreateUnityViewCallback?) {
+        fun createUnityPlayer(
+            ule: IUnityPlayerLifecycleEvents,
+            callback: OnCreateUnityViewCallback?
+        ) {
             if (activity == null) {
                 throw java.lang.Exception("Unity activity is null")
             }
@@ -190,7 +193,10 @@ class UnityPlayerUtils {
         }
 
         fun addUnityViewToGroup(group: ViewGroup) {
-             val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+            val layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            )
 //             val layoutParams = ViewGroup.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)
 //            val layoutParams = ViewGroup.LayoutParams(570, 770)
             group.addView(unityPlayer, layoutParams)

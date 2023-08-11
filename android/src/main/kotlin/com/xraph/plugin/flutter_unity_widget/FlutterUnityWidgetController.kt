@@ -26,16 +26,16 @@ import io.flutter.plugin.platform.PlatformView
 
 @SuppressLint("NewApi")
 class FlutterUnityWidgetController(
-        private val id: Int,
-        private val context: Context?,
-        binaryMessenger: BinaryMessenger,
-        lifecycleProvider: LifecycleProvider
-) :     PlatformView,
-        DefaultLifecycleObserver,
-        FlutterUnityWidgetOptionsSink,
-        MethodCallHandler,
-        UnityEventListener,
-        IUnityPlayerLifecycleEvents {
+    private val id: Int,
+    private val context: Context?,
+    binaryMessenger: BinaryMessenger,
+    lifecycleProvider: LifecycleProvider
+) : PlatformView,
+    DefaultLifecycleObserver,
+    FlutterUnityWidgetOptionsSink,
+    MethodCallHandler,
+    UnityEventListener,
+    IUnityPlayerLifecycleEvents {
 
     //#region Members
     private val LOG_TAG = "FlutterUnityController"
@@ -66,10 +66,10 @@ class FlutterUnityWidgetController(
         // Set unity listener
         UnityPlayerUtils.addUnityEventListener(this)
 
-        if(UnityPlayerUtils.unityPlayer == null) {
+        if (UnityPlayerUtils.unityPlayer == null) {
             createPlayer()
             refocusUnity()
-        } else if(!UnityPlayerUtils.unityLoaded) {
+        } else if (!UnityPlayerUtils.unityLoaded) {
             createPlayer()
             attachToView()
         } else {
@@ -127,7 +127,9 @@ class FlutterUnityWidgetController(
                 result.success(UnityPlayerUtils.unityLoaded)
             }
             "unity#isPaused" -> {
-                result.success(UnityPlayerUtils.unityPaused)
+                Thread {
+                    result.success(UnityPlayerUtils.unityPaused)
+                }.start()
             }
             "unity#postMessage" -> {
                 invalidateFrameIfNeeded()
@@ -236,7 +238,7 @@ class FlutterUnityWidgetController(
     override fun onResume(owner: LifecycleOwner) {
         Log.d(LOG_TAG, "onResume")
         reattachToView()
-        if(UnityPlayerUtils.viewStaggered && UnityPlayerUtils.unityLoaded) {
+        if (UnityPlayerUtils.viewStaggered && UnityPlayerUtils.unityLoaded) {
             this.createPlayer()
             refocusUnity()
             UnityPlayerUtils.viewStaggered = false
@@ -268,7 +270,8 @@ class FlutterUnityWidgetController(
     private fun openNativeUnity() {
         val activity = getActivity(null)
         if (activity != null) {
-            val intent = Intent(getActivity(null)!!.applicationContext, OverrideUnityActivity::class.java)
+            val intent =
+                Intent(getActivity(null)!!.applicationContext, OverrideUnityActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             intent.putExtra("fullscreen", options.fullscreenEnabled)
             intent.putExtra("flutterActivity", activity.javaClass)
@@ -285,7 +288,7 @@ class FlutterUnityWidgetController(
     private fun createPlayer() {
         try {
             if (UnityPlayerUtils.activity != null) {
-                UnityPlayerUtils.createUnityPlayer( this, object : OnCreateUnityViewCallback {
+                UnityPlayerUtils.createUnityPlayer(this, object : OnCreateUnityViewCallback {
                     override fun onReady() {
                         // attach unity to controller
                         attachToView()
@@ -382,7 +385,7 @@ class FlutterUnityWidgetController(
 
     private fun postFrameCallback(f: Runnable) {
         Choreographer.getInstance()
-                .postFrameCallback { f.run() }
+            .postFrameCallback { f.run() }
     }
     //#endregion
 }
